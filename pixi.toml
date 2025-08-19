@@ -2,11 +2,14 @@
 authors = ["Wolf Vollprecht <w.vollprecht@gmail.com>"]
 channels = ["https://prefix.dev/conda-forge"]
 name = "pixi-docker"
-platforms = ["osx-arm64"]
+platforms = ["osx-arm64", "linux-64", "win-64"]
 version = "0.1.0"
 preview = ["pixi-build"]
 
 [tasks]
+test = "cargo test --all-features"
+fmt = "cargo fmt -- --check"
+lint = "cargo clippy -- -D warnings"
 
 [dependencies]
 pixi-docker = { path = "." }

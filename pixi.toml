@@ -1,0 +1,20 @@
+[workspace]
+authors = ["Wolf Vollprecht <w.vollprecht@gmail.com>"]
+channels = ["https://prefix.dev/conda-forge"]
+name = "pixi-docker"
+platforms = ["osx-arm64"]
+version = "0.1.0"
+preview = ["pixi-build"]
+
+[tasks]
+
+[dependencies]
+pixi-docker = { path = "." }
+
+[package]
+name = "pixi-docker"
+version = "0.1.0" 
+
+[package.build]
+backend = { name = "pixi-build-rust", version = "*" }
+channels = ["https://prefix.dev/pixi-build-backends", "https://prefix.dev/conda-forge"]

@@ -1,0 +1,23 @@
+[workspace]
+name = "my-pixi-app"
+version = "1.0.0"
+channels = ["https://prefix.dev/conda-forge"]
+platforms = ["osx-arm64", "linux-64", "linux-aarch64"]
+
+[dependencies]
+python = "3.11.*"
+
+[feature.pytest.dependencies]
+pytest = "*"
+
+[tasks]
+build = "echo 'Building project...'"
+start-server = "python src/main.py"
+dev-server = "python src/main.py"
+test = "python -m pytest tests/ -v"
+test-build = "echo 'Running test build...' && python -m pytest tests/ -v"
+
+[environments]
+prod = []
+dev = ["pytest"]
+test = ["pytest"]

@@ -1,0 +1,19 @@
+version: 6
+environments:
+  default:
+    channels:
+    - url: https://prefix.dev/conda-forge/
+    packages:
+      osx-arm64:
+      - conda: .
+packages:
+- conda: .
+  name: pixi-docker
+  version: 0.1.0
+  build: hbf21a9e_0
+  subdir: osx-arm64
+  constrains:
+  - __osx >=11.0
+  input:
+    hash: 499a292de4c9ed60bcedd87b7a933a2381fd996fb7eb1546078bad5e9a20e28c
+    globs: []

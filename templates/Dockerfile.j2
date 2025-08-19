@@ -1,0 +1,71 @@
+FROM ghcr.io/prefix-dev/pixi:{{ pixi_version | default("latest") }} AS build
+
+# Copy source code, pixi.toml and pixi.lock to the container
+COPY . /app
+WORKDIR /app
+
+# Install the environment and dependencies into /app/.pixi
+RUN pixi install --locked -e {{ environment }}
+
+{% if build_command %}
+# Run build task
+RUN pixi run --locked {{ build_command }}
+{% endif %}
+
+# Create the shell-hook bash script to activate the environment
+RUN pixi shell-hook -e {{ environment }} > /shell-hook.sh
+
+# Extend the shell-hook script to run the command passed to the container
+RUN echo 'exec "$@"' >> /shell-hook.sh
+
+{% if multi_stage %}
+FROM {{ base_image | default("ubuntu:24.04") }} AS production
+
+# Only copy the production environment into prod container
+# Note: the prefix (path) needs to stay the same as in the build container
+COPY --from=build /app/.pixi/envs/{{ environment }} /app/.pixi/envs/{{ environment }}
+COPY --from=build /shell-hook.sh /shell-hook.sh
+{% if copy_files %}
+# Copy project files
+{% for file in copy_files %}
+COPY --from=build /app/{{ file }} /app/{{ file }}
+{% endfor %}
+{% endif %}
+
+WORKDIR /app
+
+{% if ports %}
+# Expose ports
+{% for port in ports %}
+EXPOSE {{ port }}
+{% endfor %}
+{% endif %}
+
+# Set the entrypoint to the shell-hook script (activate the environment and run the command)
+ENTRYPOINT ["/bin/bash", "/shell-hook.sh"]
+
+{% if entrypoint %}
+CMD ["/bin/bash", "-c", "{{ entrypoint }}"]
+{% else %}
+CMD ["/bin/bash"]
+{% endif %}
+
+{% else %}
+# Single stage build
+WORKDIR /app
+
+{% if ports %}
+# Expose ports
+{% for port in ports %}
+EXPOSE {{ port }}
+{% endfor %}
+{% endif %}
+
+ENTRYPOINT ["/bin/bash", "/shell-hook.sh"]
+
+{% if entrypoint %}
+CMD ["/bin/bash", "-c", "{{ entrypoint }}"]
+{% else %}
+CMD ["/bin/bash"]
+{% endif %}
+{% endif %}

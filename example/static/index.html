@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixi Docker Demo</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        h1 { text-align: center; }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .feature {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🐳 Pixi Docker Demo</h1>
+        <p>This is a demo application running in a Docker container built with the pixi-docker plugin!</p>
+        
+        <div class="features">
+            <div class="feature">
+                <h3>Multi-stage Builds</h3>
+                <p>Optimized Docker images with separate build and runtime stages</p>
+            </div>
+            <div class="feature">
+                <h3>Environment Support</h3>
+                <p>Different configurations for dev, test, and production</p>
+            </div>
+            <div class="feature">
+                <h3>Pixi Integration</h3>
+                <p>Leverages pixi for reproducible Python environments</p>
+            </div>
+            <div class="feature">
+                <h3>Jinja2 Templates</h3>
+                <p>Customizable Dockerfile generation using templates</p>
+            </div>
+        </div>
+        
+        <p><strong>Environment:</strong> <span id="env">Unknown</span></p>
+        <p><strong>Time:</strong> <span id="time"></span></p>
+    </div>
+    
+    <script>
+        // Simple JavaScript to show current time
+        document.getElementById('time').textContent = new Date().toLocaleString();
+        
+        // Try to detect environment from URL or other indicators
+        const hostname = window.location.hostname;
+        if (hostname === 'localhost' || hostname === '127.0.0.1') {
+            document.getElementById('env').textContent = 'Development';
+        } else {
+            document.getElementById('env').textContent = 'Production';
+        }
+    </script>
+</body>
+</html>

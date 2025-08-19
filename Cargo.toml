@@ -1,0 +1,20 @@
+[package]
+name = "pixi-docker"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "pixi-docker"
+path = "src/main.rs"
+
+[dependencies]
+minijinja = "2.0"
+serde = { version = "1.0", features = ["derive"] }
+toml = "0.8"
+clap = { version = "4.5", features = ["derive"] }
+anyhow = "1.0"
+
+[dev-dependencies]
+assert_cmd = "2.0"
+predicates = "3.0"
+tempfile = "3.8"

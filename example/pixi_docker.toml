@@ -1,0 +1,22 @@
+[docker]
+environment = "prod"
+ports = [8000]
+entrypoint = "start-server"
+copy_files = ["src/", "static/"]
+pixi_version = "0.40.0"
+build_command = "build"
+multi_stage = true
+base_image = "ubuntu:24.04"
+
+# Additional environments can be defined
+[environments.dev]
+ports = [8000, 3000]
+entrypoint = "dev-server"
+copy_files = ["src/", "static/", "tests/"]
+multi_stage = false
+
+[environments.test]
+ports = []
+entrypoint = "test"
+copy_files = ["src/", "tests/"]
+build_command = "test-build"

@@ -17,6 +17,11 @@ on:
 
 jobs:
   build:
+    permissions:
+      id-token: write
+      contents: read
+      attestations: write
+
     name: Build on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:

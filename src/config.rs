@@ -60,7 +60,7 @@ mod tests {
     fn test_load_basic_config() {
         let path = PathBuf::from("tests/fixtures/basic_config.toml");
         let config = Config::from_file(&path).unwrap();
-        
+
         assert_eq!(config.docker.environment, "prod");
         assert_eq!(config.docker.ports, vec![8080]);
         assert_eq!(config.docker.entrypoint, Some("serve".to_string()));
@@ -75,17 +75,17 @@ mod tests {
     fn test_load_multi_env_config() {
         let path = PathBuf::from("tests/fixtures/multi_env_config.toml");
         let config = Config::from_file(&path).unwrap();
-        
+
         assert_eq!(config.docker.environment, "prod");
         assert_eq!(config.docker.ports, vec![8000]);
-        
+
         // Check dev environment
         let dev_env = config.environments.get("dev").unwrap();
         assert_eq!(dev_env.ports, vec![3000, 3001]);
         assert_eq!(dev_env.entrypoint, Some("dev".to_string()));
         assert_eq!(dev_env.copy_files, vec!["app/", "tests/"]);
         assert_eq!(dev_env.multi_stage, Some(false));
-        
+
         // Check test environment
         let test_env = config.environments.get("test").unwrap();
         assert_eq!(test_env.ports, vec![]);
@@ -106,7 +106,7 @@ mod tests {
             ports = [80, 443]
             entrypoint = "app"
         "#;
-        
+
         let config: Config = toml::from_str(toml_str).unwrap();
         assert_eq!(config.docker.environment, "production");
         assert_eq!(config.docker.ports, vec![80, 443]);
@@ -129,8 +129,11 @@ mod tests {
             ports = [8080]
             template_path = "custom/template.j2"
         "#;
-        
+
         let config: Config = toml::from_str(toml_str).unwrap();
-        assert_eq!(config.docker.template_path, Some("custom/template.j2".to_string()));
+        assert_eq!(
+            config.docker.template_path,
+            Some("custom/template.j2".to_string())
+        );
     }
 }

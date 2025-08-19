@@ -138,7 +138,7 @@ impl DockerfileGenerator {
             self.generate(config, None)?,
         ));
 
-        for (env_name, _) in &config.environments {
+        for env_name in config.environments.keys() {
             if env_name != &config.docker.environment {
                 dockerfiles.push((
                     format!("Dockerfile.{}", env_name),

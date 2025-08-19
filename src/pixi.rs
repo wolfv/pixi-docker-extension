@@ -69,13 +69,7 @@ impl PixiToml {
     }
 
     pub fn translate_task_to_shell(&self, task_name: &str) -> Option<String> {
-        if let Some(command) = self.get_task_command(task_name) {
-            Some(command)
-        } else {
-            // If task not found, return the task name as-is
-            // (could be a shell command already)
-            None
-        }
+        self.get_task_command(task_name)
     }
 }
 

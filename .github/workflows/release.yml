@@ -81,7 +81,7 @@ jobs:
           # Upload each package
           for package in ./packages/*.conda; do
             echo "Uploading $package to beta.prefix.dev/pixi-extensions"
-            rattler-build upload prefix "$package" --channel pixi-extensions --url https://beta.prefix.dev --attestation "${{ steps.attest.outputs.attestation }}"
+            rattler-build upload prefix "$package" --channel pixi-extensions --url https://beta.prefix.dev --attestation "${{ steps.attest.outputs.bundle-path }}"
           done
 
   # create-release:

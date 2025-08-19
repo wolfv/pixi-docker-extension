@@ -1,0 +1,9 @@
+[docker]
+environment = "prod"
+ports = [8080]
+entrypoint = "serve"
+copy_files = ["src/"]
+pixi_version = "0.40.0"
+build_command = "build"
+multi_stage = true
+base_image = "ubuntu:24.04"

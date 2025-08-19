@@ -1,0 +1,6 @@
+[workspace]
+name = "test-app"
+version = "2.3.4"
+
+[dependencies]
+python = "3.11"

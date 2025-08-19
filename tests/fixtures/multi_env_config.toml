@@ -1,0 +1,16 @@
+[docker]
+environment = "prod"
+ports = [8000]
+entrypoint = "start"
+copy_files = ["app/"]
+
+[environments.dev]
+ports = [3000, 3001]
+entrypoint = "dev"
+copy_files = ["app/", "tests/"]
+multi_stage = false
+
+[environments.test]
+ports = []
+entrypoint = "test"
+build_command = "test-build"

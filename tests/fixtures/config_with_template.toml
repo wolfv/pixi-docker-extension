@@ -1,0 +1,5 @@
+[docker]
+environment = "prod"
+ports = [8080]
+entrypoint = "serve"
+template_path = "tests/fixtures/test_template.j2"

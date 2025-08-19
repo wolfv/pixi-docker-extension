@@ -79,7 +79,7 @@ jobs:
           pixi global install rattler-build
           
           # Upload each package
-          for package in ./packages/*.conda; do
+          for package in ./output/*.conda; do
             echo "Uploading $package to beta.prefix.dev/pixi-extensions"
             rattler-build upload prefix "$package" --channel pixi-extensions --url https://beta.prefix.dev --attestation "${{ steps.attest.outputs.bundle-path }}"
           done

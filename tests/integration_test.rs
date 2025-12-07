@@ -39,7 +39,7 @@ copy_files = ["src/"]
 }
 
 #[test]
-fn test_generate_all_environments() {
+fn test_generate_default_environment() {
     let temp_dir = TempDir::new().unwrap();
     let config_path = temp_dir.path().join("pixi_docker.toml");
 
@@ -52,26 +52,21 @@ entrypoint = "start"
 [environments.dev]
 ports = [3000]
 entrypoint = "dev"
-
-[environments.test]
-entrypoint = "test"
 "#;
     fs::write(&config_path, config_content).unwrap();
 
+    // Without -e, uses the default environment from config
     let mut cmd = Command::cargo_bin("pixi-docker").unwrap();
     cmd.arg("generate")
         .arg("--config")
         .arg(&config_path)
         .arg("--output")
         .arg(temp_dir.path())
-        .arg("--all")
         .assert()
         .success();
 
-    // Check that all Dockerfiles were created
+    // Only the default environment is generated
     assert!(temp_dir.path().join("Dockerfile.prod").exists());
-    assert!(temp_dir.path().join("Dockerfile.dev").exists());
-    assert!(temp_dir.path().join("Dockerfile.test").exists());
 }
 
 #[test]
@@ -243,8 +238,7 @@ fn test_generate_help() {
         .success()
         .stdout(predicate::str::contains("--config"))
         .stdout(predicate::str::contains("--environment"))
-        .stdout(predicate::str::contains("--output"))
-        .stdout(predicate::str::contains("--all"));
+        .stdout(predicate::str::contains("--output"));
 }
 
 #[test]
@@ -255,8 +249,7 @@ fn test_build_help() {
         .assert()
         .success()
         .stdout(predicate::str::contains("--tag"))
-        .stdout(predicate::str::contains("--no-cache"))
-        .stdout(predicate::str::contains("--platform"));
+        .stdout(predicate::str::contains("EXTRA_ARGS"));
 }
 
 #[test]

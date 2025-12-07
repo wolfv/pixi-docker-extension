@@ -129,26 +129,6 @@ impl DockerfileGenerator {
 
         Ok(output)
     }
-
-    pub fn generate_all(&self, config: &Config) -> Result<Vec<(String, String)>> {
-        let mut dockerfiles = Vec::new();
-
-        dockerfiles.push((
-            format!("Dockerfile.{}", config.docker.environment),
-            self.generate(config, None)?,
-        ));
-
-        for env_name in config.environments.keys() {
-            if env_name != &config.docker.environment {
-                dockerfiles.push((
-                    format!("Dockerfile.{}", env_name),
-                    self.generate(config, Some(env_name))?,
-                ));
-            }
-        }
-
-        Ok(dockerfiles)
-    }
 }
 
 #[cfg(test)]
@@ -226,20 +206,6 @@ mod tests {
         // Dev environment has multi_stage = false, so it won't have multi-stage build structure
         // Instead it should have single stage structure
         assert!(!result.contains("FROM ubuntu:24.04 AS production"));
-    }
-
-    #[test]
-    fn test_generate_all_environments() {
-        let config = create_test_config();
-        let generator = DockerfileGenerator::new();
-
-        let dockerfiles = generator.generate_all(&config).unwrap();
-
-        assert_eq!(dockerfiles.len(), 2); // prod and dev
-
-        let filenames: Vec<_> = dockerfiles.iter().map(|(name, _)| name).collect();
-        assert!(filenames.contains(&&"Dockerfile.prod".to_string()));
-        assert!(filenames.contains(&&"Dockerfile.dev".to_string()));
     }
 
     #[test]
